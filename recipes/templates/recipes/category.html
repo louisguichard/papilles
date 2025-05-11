@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ category.name }} – Papilles</title>
+</head>
+<body>
+    <a href="{% url 'home' %}">← Retour à l'accueil</a>
+    <h1>{{ category.name }}</h1>
+    <p>{{ category.description }}</p>
+
+    {% if recipes %}
+        <ul>
+            {% for recipe in recipes %}
+                <li>
+                    <strong>{{ recipe.title }}</strong> – {{ recipe.time }} min
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Aucune recette pour cette catégorie.</p>
+    {% endif %}
+</body>
+</html>

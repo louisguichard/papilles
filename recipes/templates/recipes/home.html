@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Papilles</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            text-align: center;
+            color: #d35400;
+            margin-bottom: 30px;
+        }
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 25px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .category-tile {
+            padding: 25px;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            text-align: center;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .category-tile:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+            background-color: #fff8f2;
+        }
+        .category-tile a {
+            text-decoration: none;
+        }
+        .category-tile h2 {
+            color: #d35400;
+            margin-top: 0;
+        }
+        .category-tile p {
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <h1>Papilles</h1>
+    <div class="category-grid">
+        {% for category in categories %}
+            <div class="category-tile">
+                <a href="{% url 'category' category.id %}">
+                    <h2>{{ category.name }}</h2>
+                </a>
+                <p>{{ category.description }}</p>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
