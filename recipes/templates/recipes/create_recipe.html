@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Nouvelle recette – Papilles</title>
+    <title>{% if edit_mode %}Modifier la recette{% else %}Nouvelle recette{% endif %} – Papilles</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
@@ -103,8 +103,8 @@
 </head>
 <body>
     <div class="container">
-        <a href="{% url 'home' %}" class="back-link">← Retour à l'accueil</a>
-        <h1>Nouvelle recette</h1>
+        <a href="{% if edit_mode %}{% url 'recipe' recipe.slug %}{% else %}{% url 'home' %}{% endif %}" class="back-link">← {% if edit_mode %}Retour à la recette{% else %}Retour à l'accueil{% endif %}</a>
+        <h1>{% if edit_mode %}Modifier la recette{% else %}Nouvelle recette{% endif %}</h1>
         
         <div class="form-wrapper">
             <form method="post" enctype="multipart/form-data">
@@ -140,7 +140,7 @@
                     </p>
                 {% endfor %}
                 
-                <button type="submit" class="submit-button">Créer la recette</button>
+                <button type="submit" class="submit-button">{% if edit_mode %}Enregistrer les modifications{% else %}Créer la recette{% endif %}</button>
             </form>
         </div>
     </div>

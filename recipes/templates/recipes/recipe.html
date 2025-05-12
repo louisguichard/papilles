@@ -87,11 +87,37 @@
             white-space: pre-line;
             line-height: 1.7;
         }
+        .edit-button {
+            display: inline-block;
+            background-color: #d35400;
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            margin-top: 20px;
+            font-weight: 500;
+        }
+        .edit-button:hover {
+            background-color: #aa4400;
+        }
+        .header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <a href="javascript:history.back()" class="back-link">← Retour</a>
+        <div class="header-actions">
+            {% if first_category %}
+            <a href="{% url 'category' first_category.slug %}" class="back-link">← Retour à {{ first_category.name }}</a>
+            {% else %}
+            <a href="{% url 'home' %}" class="back-link">← Retour à l'accueil</a>
+            {% endif %}
+            <a href="{% url 'edit_recipe' recipe.slug %}" class="edit-button">Modifier la recette</a>
+        </div>
         
         <div class="recipe-header">
             <h1>{{ recipe.title }}</h1>
