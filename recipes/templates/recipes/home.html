@@ -101,7 +101,7 @@
         <div class="category-grid">
             {% for category in categories %}
                 <div class="category-tile">
-                    <a href="{% url 'category' category.id %}">
+                    <a href="{% url 'category' category.slug %}">
                         {% if category.image %}
                             <img src="{{ category.image.url }}" alt="{{ category.name }}" class="category-image">
                         {% else %}

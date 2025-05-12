@@ -8,8 +8,8 @@ def home(request):
     return render(request, "recipes/home.html", {"categories": categories})
 
 
-def category(request, category_id):
-    category = get_object_or_404(Category, id=category_id)
+def category(request, category_slug):
+    category = get_object_or_404(Category, slug=category_slug)
     recipes = category.recipes.all()
     return render(
         request,
@@ -21,8 +21,8 @@ def category(request, category_id):
     )
 
 
-def recipe(request, recipe_id):
-    recipe = get_object_or_404(Recipe, id=recipe_id)
+def recipe(request, recipe_slug):
+    recipe = get_object_or_404(Recipe, slug=recipe_slug)
     return render(
         request,
         "recipes/recipe.html",

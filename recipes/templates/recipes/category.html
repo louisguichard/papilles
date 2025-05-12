@@ -123,7 +123,7 @@
         {% if recipes %}
             <div class="recipes-grid">
                 {% for recipe in recipes %}
-                    <a href="{% url 'recipe' recipe.id %}" class="recipe-card">
+                    <a href="{% url 'recipe' recipe.slug %}" class="recipe-card">
                         {% if recipe.picture %}
                             <img src="{{ recipe.picture.url }}" alt="{{ recipe.title }}" class="recipe-image">
                         {% else %}
