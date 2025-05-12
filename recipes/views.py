@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Category
+from .models import Category, Recipe
 
 
 def home(request):
@@ -16,5 +16,16 @@ def category(request, category_id):
         {
             "category": category,
             "recipes": recipes,
+        },
+    )
+
+
+def recipe(request, recipe_id):
+    recipe = get_object_or_404(Recipe, id=recipe_id)
+    return render(
+        request,
+        "recipes/recipe.html",
+        {
+            "recipe": recipe,
         },
     )

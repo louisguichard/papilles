@@ -52,29 +52,48 @@
             color: #444;
             margin-bottom: 30px;
         }
-        .recipes-list {
-            list-style: none;
-            padding: 0;
+        .recipes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+            gap: 20px;
+            margin: 0 auto;
         }
-        .recipe-item {
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 15px;
+        .recipe-card {
             background-color: #fff;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            transition: transform 0.2s;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
         }
-        .recipe-item:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        .recipe-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        .recipe-image {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #aaa;
+        }
+        .recipe-content {
+            padding: 15px;
         }
         .recipe-title {
+            margin: 0 0 5px 0;
             color: #333;
-            margin: 0;
+            font-size: 1.1em;
         }
         .recipe-time {
             color: #777;
             font-size: 0.9em;
+            display: block;
         }
         .no-recipes {
             padding: 20px;
@@ -82,6 +101,7 @@
             border-radius: 8px;
             text-align: center;
             color: #777;
+            grid-column: 1 / -1;
         }
     </style>
 </head>
@@ -101,16 +121,23 @@
         </div>
 
         {% if recipes %}
-            <ul class="recipes-list">
+            <div class="recipes-grid">
                 {% for recipe in recipes %}
-                    <li class="recipe-item">
-                        <h3 class="recipe-title">{{ recipe.title }}</h3>
-                        {% if recipe.time %}
-                            <span class="recipe-time">{{ recipe.time }} minutes</span>
+                    <a href="{% url 'recipe' recipe.id %}" class="recipe-card">
+                        {% if recipe.picture %}
+                            <img src="{{ recipe.picture.url }}" alt="{{ recipe.title }}" class="recipe-image">
+                        {% else %}
+                            <div class="recipe-image">No image</div>
                         {% endif %}
-                    </li>
+                        <div class="recipe-content">
+                            <h3 class="recipe-title">{{ recipe.title }}</h3>
+                            {% if recipe.time %}
+                                <span class="recipe-time">{{ recipe.time }} minutes</span>
+                            {% endif %}
+                        </div>
+                    </a>
                 {% endfor %}
-            </ul>
+            </div>
         {% else %}
             <div class="no-recipes">
                 <p>Aucune recette pour cette catégorie.</p>
