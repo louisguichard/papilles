@@ -19,6 +19,31 @@
             max-width: 1200px;
             margin: 0 auto;
         }
+        .header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .create-button {
+            background-color: #d35400;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 16px;
+            cursor: pointer;
+            font-weight: 500;
+            text-decoration: none;
+            transition: background-color 0.2s;
+            display: inline-flex;
+            align-items: center;
+        }
+        .create-button:hover {
+            background-color: #aa4400;
+        }
+        .create-button span {
+            margin-left: 6px;
+        }
         .category-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -66,8 +91,13 @@
     </style>
 </head>
 <body>
-    <h1>Papilles</h1>
     <div class="container">
+        <div class="header-section">
+            <h1>Papilles</h1>
+            <a href="{% url 'create_recipe' %}" class="create-button">
+                + <span>Nouvelle recette</span>
+            </a>
+        </div>
         <div class="category-grid">
             {% for category in categories %}
                 <div class="category-tile">

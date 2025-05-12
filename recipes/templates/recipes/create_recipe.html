@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Nouvelle recette – Papilles</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #d35400;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        h1 {
+            color: #d35400;
+            margin-top: 0;
+            margin-bottom: 30px;
+        }
+        .form-wrapper {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        form p {
+            margin-bottom: 25px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+        }
+        input[type="text"],
+        input[type="number"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-family: inherit;
+            font-size: 16px;
+        }
+        textarea {
+            resize: vertical;
+        }
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        .checkbox-label input[type="checkbox"] {
+            margin-right: 8px;
+        }
+        .submit-button {
+            background-color: #d35400;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 12px 24px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.2s;
+        }
+        .submit-button:hover {
+            background-color: #aa4400;
+        }
+        .errorlist {
+            color: #d9534f;
+            list-style-type: none;
+            padding: 0;
+            margin: 5px 0 0 0;
+            font-size: 14px;
+        }
+        .help-text {
+            font-size: 14px;
+            color: #777;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="{% url 'home' %}" class="back-link">← Retour à l'accueil</a>
+        <h1>Nouvelle recette</h1>
+        
+        <div class="form-wrapper">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                {% for field in form %}
+                    <p>
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        
+                        {% if field.name == 'categories' %}
+                            <div class="checkbox-group">
+                                {% for checkbox in field %}
+                                    <label class="checkbox-label">
+                                        {{ checkbox.tag }} {{ checkbox.choice_label }}
+                                    </label>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ field }}
+                        {% endif %}
+                        
+                        {% if field.help_text %}
+                            <span class="help-text">{{ field.help_text }}</span>
+                        {% endif %}
+                        
+                        {% if field.errors %}
+                            <ul class="errorlist">
+                                {% for error in field.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </p>
+                {% endfor %}
+                
+                <button type="submit" class="submit-button">Créer la recette</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html> 
