@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -127,7 +128,7 @@
                         {% if recipe.picture %}
                             <img src="{{ recipe.picture.url }}" alt="{{ recipe.title }}" class="recipe-image">
                         {% else %}
-                            <div class="recipe-image">No image</div>
+                            <img src="{% static 'images/no-image-placeholder.png' %}" alt="No image available" class="recipe-image">
                         {% endif %}
                         <div class="recipe-content">
                             <h3 class="recipe-title">{{ recipe.title }}</h3>

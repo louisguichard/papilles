@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -105,7 +106,7 @@
                 {% if recipe.categories.all %}
                 <div class="categories-info">
                     {% for category in recipe.categories.all %}
-                    <a href="{% url 'category' category.id %}" class="category-tag">{{ category.name }}</a>
+                    <a href="{% url 'category' category.slug %}" class="category-tag">{{ category.name }}</a>
                     {% endfor %}
                 </div>
                 {% endif %}
@@ -114,6 +115,8 @@
 
         {% if recipe.picture %}
         <img src="{{ recipe.picture.url }}" alt="{{ recipe.title }}" class="recipe-image">
+        {% else %}
+        <img src="{% static 'images/no-image-placeholder.png' %}" alt="No image available" class="recipe-image">
         {% endif %}
         
         {% if recipe.ingredients %}

@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -105,7 +106,7 @@
                         {% if category.image %}
                             <img src="{{ category.image.url }}" alt="{{ category.name }}" class="category-image">
                         {% else %}
-                            <div class="no-image">No image</div>
+                            <img src="{% static 'images/no-image-placeholder.png' %}" alt="No image available" class="category-image">
                         {% endif %}
                         <h2>{{ category.name }}</h2>
                     </a>
