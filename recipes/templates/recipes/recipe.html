@@ -52,6 +52,11 @@
             display: flex;
             align-items: center;
         }
+        .owner-info {
+            margin-right: 30px;
+            display: flex;
+            align-items: center;
+        }
         .categories-info {
             display: flex;
             flex-wrap: wrap;
@@ -116,7 +121,9 @@
             {% else %}
             <a href="{% url 'home' %}" class="back-link">← Retour à l'accueil</a>
             {% endif %}
+            {% if is_owner %}
             <a href="{% url 'edit_recipe' recipe.slug %}" class="edit-button">Modifier la recette</a>
+            {% endif %}
         </div>
         
         <div class="recipe-header">
@@ -128,6 +135,10 @@
                     <span>⏱️ {{ recipe.time }} minutes</span>
                 </div>
                 {% endif %}
+                
+                <div class="owner-info">
+                    <span>👤 Par {{ recipe.user.username }}</span>
+                </div>
                 
                 {% if recipe.categories.all %}
                 <div class="categories-info">

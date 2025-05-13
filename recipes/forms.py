@@ -13,6 +13,7 @@ class RecipeForm(forms.ModelForm):
             "ingredients",
             "instructions",
         ]
+        exclude = ["user", "slug"]
         widgets = {
             "categories": forms.CheckboxSelectMultiple(),
             "ingredients": forms.Textarea(

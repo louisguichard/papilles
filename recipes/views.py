@@ -1,6 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Category, Recipe
 from .forms import RecipeForm
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseForbidden
 
 
 def home(request):
@@ -31,15 +33,20 @@ def recipe(request, recipe_slug):
         {
             "recipe": recipe,
             "first_category": first_category,
+            "is_owner": request.user == recipe.user,
         },
     )
 
 
+@login_required
 def create_recipe(request):
     if request.method == "POST":
         form = RecipeForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            recipe = form.save(commit=False)
+            recipe.user = request.user
+            recipe.save()
+            form.save_m2m()  # Save many-to-many fields
             return redirect("home")
     else:
         form = RecipeForm()
@@ -53,8 +60,13 @@ def create_recipe(request):
     )
 
 
+@login_required
 def edit_recipe(request, recipe_slug):
     recipe = get_object_or_404(Recipe, slug=recipe_slug)
+
+    # Check if the user is the owner of the recipe
+    if request.user != recipe.user:
+        return HttpResponseForbidden("You don't have permission to edit this recipe")
 
     if request.method == "POST":
         form = RecipeForm(request.POST, request.FILES, instance=recipe)

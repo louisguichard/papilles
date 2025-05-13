@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.text import slugify
+from django.contrib.auth.models import User
 
 
 class Category(models.Model):
@@ -26,6 +27,9 @@ class Category(models.Model):
 class Recipe(models.Model):
     title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=200, unique=True)
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="recipes", null=True, blank=True
+    )
     categories = models.ManyToManyField(
         Category,
         related_name="recipes",
