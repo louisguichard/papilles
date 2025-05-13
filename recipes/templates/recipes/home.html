@@ -89,15 +89,42 @@
             margin-bottom: 15px;
             color: #aaa;
         }
+        .user-actions {
+            display: flex;
+            gap: 15px;
+        }
+        .auth-link {
+            color: #d35400;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .auth-link:hover {
+            text-decoration: underline;
+        }
+        .welcome-text {
+            margin-right: 15px;
+            font-size: 14px;
+            color: #555;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header-section">
             <h1>Papilles</h1>
-            <a href="{% url 'create_recipe' %}" class="create-button">
-                + <span>Nouvelle recette</span>
-            </a>
+            <div class="user-actions">
+                {% if user.is_authenticated %}
+                    <span class="welcome-text">Hello, {{ user.username }}!</span>
+                    <a href="{% url 'profile' %}" class="auth-link">Profile</a>
+                    <a href="{% url 'logout' %}" class="auth-link">Logout</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="auth-link">Login</a>
+                    <a href="{% url 'register' %}" class="auth-link">Register</a>
+                {% endif %}
+                <a href="{% url 'create_recipe' %}" class="create-button">
+                    + <span>Nouvelle recette</span>
+                </a>
+            </div>
         </div>
         <div class="category-grid">
             {% for category in categories %}
