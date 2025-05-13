@@ -1,23 +1,23 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Category, Recipe
+from .models import Collection, Recipe
 from .forms import RecipeForm
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
 
 
 def home(request):
-    categories = Category.objects.all()
-    return render(request, "recipes/home.html", {"categories": categories})
+    collections = Collection.objects.all()
+    return render(request, "recipes/home.html", {"collections": collections})
 
 
-def category(request, category_slug):
-    category = get_object_or_404(Category, slug=category_slug)
-    recipes = category.recipes.all()
+def collection(request, collection_slug):
+    collection = get_object_or_404(Collection, slug=collection_slug)
+    recipes = collection.recipes.all()
     return render(
         request,
-        "recipes/category.html",
+        "recipes/collection.html",
         {
-            "category": category,
+            "collection": collection,
             "recipes": recipes,
         },
     )
@@ -25,14 +25,14 @@ def category(request, category_slug):
 
 def recipe(request, recipe_slug):
     recipe = get_object_or_404(Recipe, slug=recipe_slug)
-    # Get the first category for the back link (if any)
-    first_category = recipe.categories.first()
+    # Get the first collection for the back link (if any)
+    first_collection = recipe.collections.first()
     return render(
         request,
         "recipes/recipe.html",
         {
             "recipe": recipe,
-            "first_category": first_category,
+            "first_collection": first_collection,
             "is_owner": request.user == recipe.user,
         },
     )

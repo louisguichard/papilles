@@ -3,11 +3,11 @@ from django.utils.text import slugify
 from django.contrib.auth.models import User
 
 
-class Category(models.Model):
+class Collection(models.Model):
     name = models.CharField(max_length=100, unique=True)
     slug = models.SlugField(max_length=100, unique=True)
     description = models.TextField()
-    image = models.ImageField(upload_to="categories/", blank=True, null=True)
+    image = models.ImageField(upload_to="collections/", blank=True, null=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -15,7 +15,7 @@ class Category(models.Model):
             # Check if the slug exists
             counter = 1
             original_slug = self.slug
-            while Category.objects.filter(slug=self.slug).exists():
+            while Collection.objects.filter(slug=self.slug).exists():
                 self.slug = f"{original_slug}-{counter}"
                 counter += 1
         super().save(*args, **kwargs)
@@ -30,8 +30,8 @@ class Recipe(models.Model):
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="recipes", null=True, blank=True
     )
-    categories = models.ManyToManyField(
-        Category,
+    collections = models.ManyToManyField(
+        Collection,
         related_name="recipes",
         blank=True,
     )

@@ -57,12 +57,12 @@
             display: flex;
             align-items: center;
         }
-        .categories-info {
+        .collections-info {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
         }
-        .category-tag {
+        .collection-tag {
             background-color: #f2f2f2;
             padding: 5px 10px;
             border-radius: 20px;
@@ -70,7 +70,7 @@
             color: #555;
             text-decoration: none;
         }
-        .category-tag:hover {
+        .collection-tag:hover {
             background-color: #e0e0e0;
         }
         .section-title {
@@ -116,8 +116,8 @@
 <body>
     <div class="container">
         <div class="header-actions">
-            {% if first_category %}
-            <a href="{% url 'category' first_category.slug %}" class="back-link">← Retour à {{ first_category.name }}</a>
+            {% if first_collection %}
+            <a href="{% url 'collection' first_collection.slug %}" class="back-link">← Retour à {{ first_collection.name }}</a>
             {% else %}
             <a href="{% url 'home' %}" class="back-link">← Retour à l'accueil</a>
             {% endif %}
@@ -140,10 +140,10 @@
                     <span>👤 Par {{ recipe.user.username }}</span>
                 </div>
                 
-                {% if recipe.categories.all %}
-                <div class="categories-info">
-                    {% for category in recipe.categories.all %}
-                    <a href="{% url 'category' category.slug %}" class="category-tag">{{ category.name }}</a>
+                {% if recipe.collections.all %}
+                <div class="collections-info">
+                    {% for collection in recipe.collections.all %}
+                    <a href="{% url 'collection' collection.slug %}" class="collection-tag">{{ collection.name }}</a>
                     {% endfor %}
                 </div>
                 {% endif %}

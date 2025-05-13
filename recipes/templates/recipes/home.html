@@ -45,13 +45,13 @@
         .create-button span {
             margin-left: 6px;
         }
-        .category-grid {
+        .collection-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             gap: 25px;
             margin: 0 auto;
         }
-        .category-tile {
+        .collection-tile {
             padding: 25px;
             border: 1px solid #e0e0e0;
             border-radius: 12px;
@@ -60,19 +60,19 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.05);
             transition: transform 0.2s, box-shadow 0.2s;
         }
-        .category-tile:hover {
+        .collection-tile:hover {
             transform: translateY(-5px);
             box-shadow: 0 6px 12px rgba(0,0,0,0.1);
             background-color: #fff8f2;
         }
-        .category-tile a {
+        .collection-tile a {
             text-decoration: none;
         }
-        .category-tile h2 {
+        .collection-tile h2 {
             color: #d35400;
             margin-top: 0;
         }
-        .category-image {
+        .collection-image {
             width: 100%;
             height: 150px;
             object-fit: cover;
@@ -126,16 +126,16 @@
                 </a>
             </div>
         </div>
-        <div class="category-grid">
-            {% for category in categories %}
-                <div class="category-tile">
-                    <a href="{% url 'category' category.slug %}">
-                        {% if category.image %}
-                            <img src="{{ category.image.url }}" alt="{{ category.name }}" class="category-image">
+        <div class="collection-grid">
+            {% for collection in collections %}
+                <div class="collection-tile">
+                    <a href="{% url 'collection' collection.slug %}">
+                        {% if collection.image %}
+                            <img src="{{ collection.image.url }}" alt="{{ collection.name }}" class="collection-image">
                         {% else %}
-                            <img src="{% static 'images/no-image-placeholder.png' %}" alt="No image available" class="category-image">
+                            <img src="{% static 'images/no-image-placeholder.png' %}" alt="No image available" class="collection-image">
                         {% endif %}
-                        <h2>{{ category.name }}</h2>
+                        <h2>{{ collection.name }}</h2>
                     </a>
                 </div>
             {% endfor %}
