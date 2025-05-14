@@ -36,8 +36,10 @@ def my_collections(request):
     return render(request, "recipes/my_collections.html", {"collections": collections})
 
 
-def collection(request, collection_slug):
-    collection = get_object_or_404(Collection, slug=collection_slug)
+def collection(request, username, collection_slug):
+    collection = get_object_or_404(
+        Collection, user__username=username, slug=collection_slug
+    )
     recipes = collection.recipes.all()
     return render(
         request,
@@ -49,8 +51,8 @@ def collection(request, collection_slug):
     )
 
 
-def recipe(request, recipe_slug):
-    recipe = get_object_or_404(Recipe, slug=recipe_slug)
+def recipe(request, username, recipe_slug):
+    recipe = get_object_or_404(Recipe, user__username=username, slug=recipe_slug)
     # Get the first collection for the back link (if any)
     first_collection = recipe.collections.first()
     return render(
@@ -73,7 +75,9 @@ def create_recipe(request):
             recipe.user = request.user
             recipe.save()
             form.save_m2m()  # Save many-to-many fields
-            return redirect("recipe", recipe_slug=recipe.slug)
+            return redirect(
+                "recipe", username=request.user.username, recipe_slug=recipe.slug
+            )
     else:
         form = RecipeForm()
 
@@ -89,7 +93,7 @@ def create_recipe(request):
 
 @login_required
 def edit_recipe(request, recipe_slug):
-    recipe = get_object_or_404(Recipe, slug=recipe_slug)
+    recipe = get_object_or_404(Recipe, slug=recipe_slug, user=request.user)
 
     # Check if the user is the owner of the recipe
     if request.user != recipe.user:
@@ -99,7 +103,9 @@ def edit_recipe(request, recipe_slug):
         form = RecipeForm(request.POST, request.FILES, instance=recipe)
         if form.is_valid():
             form.save()
-            return redirect("recipe", recipe_slug=recipe.slug)
+            return redirect(
+                "recipe", username=request.user.username, recipe_slug=recipe.slug
+            )
     else:
         form = RecipeForm(instance=recipe)
 
@@ -138,7 +144,7 @@ def create_collection(request):
 
 @login_required
 def edit_collection(request, collection_slug):
-    collection = get_object_or_404(Collection, slug=collection_slug)
+    collection = get_object_or_404(Collection, slug=collection_slug, user=request.user)
 
     # Check if user is allowed to edit this collection
     if collection.user != request.user and not request.user.is_staff:
@@ -150,7 +156,11 @@ def edit_collection(request, collection_slug):
         form = CollectionForm(request.POST, request.FILES, instance=collection)
         if form.is_valid():
             form.save()
-            return redirect("collection", collection_slug=collection.slug)
+            return redirect(
+                "collection",
+                username=request.user.username,
+                collection_slug=collection.slug,
+            )
     else:
         form = CollectionForm(instance=collection)
 
@@ -167,7 +177,7 @@ def edit_collection(request, collection_slug):
 
 @login_required
 def delete_collection(request, collection_slug):
-    collection = get_object_or_404(Collection, slug=collection_slug)
+    collection = get_object_or_404(Collection, slug=collection_slug, user=request.user)
 
     # Check if user is allowed to delete this collection
     if collection.user != request.user and not request.user.is_staff:

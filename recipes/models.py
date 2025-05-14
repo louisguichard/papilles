@@ -19,8 +19,8 @@ class Gallery(models.Model):
 
 
 class Collection(models.Model):
-    name = models.CharField(max_length=100, unique=True)
-    slug = models.SlugField(max_length=100, unique=True)
+    name = models.CharField(max_length=100)
+    slug = models.SlugField(max_length=100)
     description = models.TextField()
     image = models.ImageField(upload_to="collections/", blank=True, null=True)
     user = models.ForeignKey(
@@ -34,12 +34,12 @@ class Collection(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
-            # Check if the slug exists
+            # Check if the slug exists for this user's collections
             counter = 1
             original_slug = self.slug
-            while Collection.objects.filter(slug=self.slug).exists():
-                self.slug = f"{original_slug}-{counter}"
+            while Collection.objects.filter(slug=self.slug, user=self.user).exists():
                 counter += 1
+                self.slug = f"{original_slug}-{counter}"
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -48,7 +48,7 @@ class Collection(models.Model):
 
 class Recipe(models.Model):
     title = models.CharField(max_length=200)
-    slug = models.SlugField(max_length=200, unique=True)
+    slug = models.SlugField(max_length=200)
     user = models.ForeignKey(
         User, on_delete=models.SET_NULL, related_name="recipes", null=True, blank=True
     )
@@ -70,10 +70,10 @@ class Recipe(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.title)
-            # Check if the slug exists
+            # Check if the slug exists for this user's recipes
             counter = 1
             original_slug = self.slug
-            while Recipe.objects.filter(slug=self.slug).exists():
+            while Recipe.objects.filter(slug=self.slug, user=self.user).exists():
                 counter += 1
                 self.slug = f"{original_slug}-{counter}"
         super().save(*args, **kwargs)

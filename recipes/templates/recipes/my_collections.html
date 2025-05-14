@@ -166,7 +166,7 @@
             <div class="collections-grid">
                 {% for collection in collections %}
                     <div class="collection-tile">
-                        <a href="{% url 'collection' collection.slug %}">
+                        <a href="{% url 'collection' request.user.username collection.slug %}">
                             {% if collection.image %}
                                 <img src="{{ collection.image.url }}" alt="{{ collection.name }}" class="collection-image">
                             {% else %}

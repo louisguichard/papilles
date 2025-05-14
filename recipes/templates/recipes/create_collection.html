@@ -90,7 +90,7 @@
 </head>
 <body>
     <div class="container">
-        <a href="{% if edit_mode %}{% url 'collection' collection.slug %}{% else %}{% url 'profile' %}{% endif %}" class="back-link">← {% if edit_mode %}Retour à la collection{% else %}Retour au profil{% endif %}</a>
+        <a href="{% if edit_mode %}{% url 'collection' collection.user.username collection.slug %}{% else %}{% url 'profile' %}{% endif %}" class="back-link">← {% if edit_mode %}Retour à la collection{% else %}Retour au profil{% endif %}</a>
         <h1>{% if edit_mode %}Modifier la collection{% else %}Nouvelle collection{% endif %}</h1>
         
         <div class="form-wrapper">
