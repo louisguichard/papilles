@@ -35,6 +35,12 @@ class RecipeForm(forms.ModelForm):
             "instructions": "Instructions",
         }
 
+    def __init__(self, user=None, *args, **kwargs):
+        super(RecipeForm, self).__init__(*args, **kwargs)
+        # Filter collections to only show user's own collections
+        if user:
+            self.fields["collections"].queryset = Collection.objects.filter(user=user)
+
 
 class CollectionForm(forms.ModelForm):
     class Meta:

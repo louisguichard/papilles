@@ -25,4 +25,9 @@ urlpatterns = [
         views.delete_collection,
         name="delete_collection",
     ),
+    path(
+        "recipe/<str:username>/<slug:recipe_slug>/add-to-collection/",
+        views.add_to_collection,
+        name="add_to_collection",
+    ),
 ]

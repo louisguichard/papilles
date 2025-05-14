@@ -3,6 +3,7 @@ from .models import Collection, Recipe, Gallery
 from .forms import RecipeForm, CollectionForm
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
+from django.contrib import messages
 
 
 def home(request):
@@ -55,6 +56,12 @@ def recipe(request, username, recipe_slug):
     recipe = get_object_or_404(Recipe, user__username=username, slug=recipe_slug)
     # Get the first collection for the back link (if any)
     first_collection = recipe.collections.first()
+
+    # Get user collections for the add to collection form
+    user_collections = []
+    if request.user.is_authenticated and request.user != recipe.user:
+        user_collections = Collection.objects.filter(user=request.user)
+
     return render(
         request,
         "recipes/recipe.html",
@@ -62,6 +69,8 @@ def recipe(request, username, recipe_slug):
             "recipe": recipe,
             "first_collection": first_collection,
             "is_owner": request.user == recipe.user,
+            "user": request.user,
+            "user_collections": user_collections,
         },
     )
 
@@ -69,7 +78,7 @@ def recipe(request, username, recipe_slug):
 @login_required
 def create_recipe(request):
     if request.method == "POST":
-        form = RecipeForm(request.POST, request.FILES)
+        form = RecipeForm(user=request.user, data=request.POST, files=request.FILES)
         if form.is_valid():
             recipe = form.save(commit=False)
             recipe.user = request.user
@@ -79,7 +88,7 @@ def create_recipe(request):
                 "recipe", username=request.user.username, recipe_slug=recipe.slug
             )
     else:
-        form = RecipeForm()
+        form = RecipeForm(user=request.user)
 
     return render(
         request,
@@ -100,14 +109,16 @@ def edit_recipe(request, recipe_slug):
         return HttpResponseForbidden("You don't have permission to edit this recipe")
 
     if request.method == "POST":
-        form = RecipeForm(request.POST, request.FILES, instance=recipe)
+        form = RecipeForm(
+            user=request.user, data=request.POST, files=request.FILES, instance=recipe
+        )
         if form.is_valid():
             form.save()
             return redirect(
                 "recipe", username=request.user.username, recipe_slug=recipe.slug
             )
     else:
-        form = RecipeForm(instance=recipe)
+        form = RecipeForm(user=request.user, instance=recipe)
 
     return render(
         request,
@@ -196,3 +207,53 @@ def delete_collection(request, collection_slug):
             "collection": collection,
         },
     )
+
+
+@login_required
+def add_to_collection(request, username, recipe_slug):
+    # Get the original recipe
+    original_recipe = get_object_or_404(
+        Recipe, user__username=username, slug=recipe_slug
+    )
+
+    # Check if the user is trying to add their own recipe
+    if request.user == original_recipe.user:
+        messages.error(
+            request,
+            "Vous ne pouvez pas ajouter votre propre recette à vos collections.",
+        )
+        return redirect("recipe", username=username, recipe_slug=recipe_slug)
+
+    if request.method == "POST":
+        # Get selected collections from the form
+        collection_ids = request.POST.getlist("collections[]")
+
+        if not collection_ids:
+            messages.error(request, "Veuillez sélectionner au moins une collection.")
+            return redirect("recipe", username=username, recipe_slug=recipe_slug)
+
+        added_collections = []
+        for collection_id in collection_ids:
+            try:
+                collection = Collection.objects.get(id=collection_id, user=request.user)
+                # Check if this recipe is already in the collection
+                if not collection.recipes.filter(id=original_recipe.id).exists():
+                    # Add the original recipe to the user's collection
+                    collection.recipes.add(original_recipe)
+                    added_collections.append(collection.name)
+            except Collection.DoesNotExist:
+                continue
+
+        if added_collections:
+            collection_names = ", ".join(added_collections)
+            messages.success(
+                request,
+                f"Recette ajoutée aux collections suivantes : {collection_names}",
+            )
+        else:
+            messages.info(request, "Aucune collection valide n'a été sélectionnée.")
+
+        return redirect("recipe", username=username, recipe_slug=recipe_slug)
+
+    # If GET request, redirect back to recipe
+    return redirect("recipe", username=username, recipe_slug=recipe_slug)
