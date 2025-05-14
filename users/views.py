@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout
 from django.contrib import messages
 from .forms import UserRegistrationForm
-from django.http import HttpResponseRedirect
 from recipes.models import Collection
 
 
@@ -29,9 +28,4 @@ def profile(request):
 
 def logout_view(request):
     logout(request)
-    # Get the referring page or use home as fallback
-    referer = request.META.get("HTTP_REFERER")
-    if referer:
-        return HttpResponseRedirect(referer)
-    else:
-        return redirect("home")
+    return redirect("home")
