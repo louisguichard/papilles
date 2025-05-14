@@ -103,7 +103,7 @@
 </head>
 <body>
     <div class="container">
-        <a href="{% if edit_mode %}{% url 'recipe' recipe.slug %}{% else %}{% url 'home' %}{% endif %}" class="back-link">← {% if edit_mode %}Retour à la recette{% else %}Retour à l'accueil{% endif %}</a>
+        <a href="{% if edit_mode %}{% url 'recipe' recipe.user.username recipe.slug %}{% else %}{% url 'home' %}{% endif %}" class="back-link">← {% if edit_mode %}Retour à la recette{% else %}Retour à l'accueil{% endif %}</a>
         <h1>{% if edit_mode %}Modifier la recette{% else %}Nouvelle recette{% endif %}</h1>
         
         <div class="form-wrapper">

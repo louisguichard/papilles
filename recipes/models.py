@@ -66,6 +66,8 @@ class Recipe(models.Model):
     picture = models.ImageField(upload_to="recipes/", blank=True, null=True)
     ingredients = models.TextField(blank=True)
     instructions = models.TextField(blank=True)
+    variations = models.TextField(blank=True)
+    nutrition = models.TextField(blank=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:

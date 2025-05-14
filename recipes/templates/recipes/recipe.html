@@ -316,6 +316,16 @@
         <h2 class="section-title">Instructions</h2>
         <div class="instructions">{{ recipe.instructions }}</div>
         {% endif %}
+        
+        {% if recipe.variations %}
+        <h2 class="section-title">Variantes</h2>
+        <div class="instructions">{{ recipe.variations }}</div>
+        {% endif %}
+        
+        {% if recipe.nutrition %}
+        <h2 class="section-title">Nutrition</h2>
+        <div class="instructions">{{ recipe.nutrition }}</div>
+        {% endif %}
     </div>
 
     <script>

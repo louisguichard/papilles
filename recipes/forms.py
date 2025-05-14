@@ -13,6 +13,8 @@ class RecipeForm(forms.ModelForm):
             "picture",
             "ingredients",
             "instructions",
+            "variations",
+            "nutrition",
         ]
         exclude = ["user", "slug"]
         widgets = {
@@ -24,6 +26,12 @@ class RecipeForm(forms.ModelForm):
             "instructions": forms.Textarea(
                 attrs={"rows": 12, "placeholder": "Décrivez les étapes de préparation"}
             ),
+            "variations": forms.Textarea(
+                attrs={"rows": 6, "placeholder": "Variantes possibles de la recette"}
+            ),
+            "nutrition": forms.Textarea(
+                attrs={"rows": 6, "placeholder": "Informations nutritionnelles"}
+            ),
         }
         labels = {
             "title": "Nom de la recette",
@@ -33,6 +41,8 @@ class RecipeForm(forms.ModelForm):
             "picture": "Photo",
             "ingredients": "Ingrédients",
             "instructions": "Instructions",
+            "variations": "Variantes",
+            "nutrition": "Nutrition",
         }
 
     def __init__(self, user=None, *args, **kwargs):
