@@ -108,7 +108,9 @@
 </head>
 <body>
     <div class="container">
+        {% if user.is_authenticated %}
         <a href="{% url 'my_collections' %}" class="back-link">← Retour à mes collections</a>
+        {% endif %}
         
         <div class="collection-header">
             {% if collection.image %}
