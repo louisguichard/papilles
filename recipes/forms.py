@@ -8,6 +8,7 @@ class RecipeForm(forms.ModelForm):
         fields = [
             "title",
             "collections",
+            "galleries",
             "time",
             "picture",
             "ingredients",
@@ -16,6 +17,7 @@ class RecipeForm(forms.ModelForm):
         exclude = ["user", "slug"]
         widgets = {
             "collections": forms.CheckboxSelectMultiple(),
+            "galleries": forms.CheckboxSelectMultiple(),
             "ingredients": forms.Textarea(
                 attrs={"rows": 8, "placeholder": "Un ingrédient par ligne"}
             ),
@@ -26,6 +28,7 @@ class RecipeForm(forms.ModelForm):
         labels = {
             "title": "Nom de la recette",
             "collections": "Collections",
+            "galleries": "Galleries",
             "time": "Temps de préparation (minutes)",
             "picture": "Photo",
             "ingredients": "Ingrédients",

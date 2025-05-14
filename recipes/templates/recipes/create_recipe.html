@@ -114,7 +114,7 @@
                     <p>
                         <label for="{{ field.id_for_label }}">{{ field.label }}</label>
                         
-                        {% if field.name == 'collections' %}
+                        {% if field.name == 'collections' or field.name == 'galleries' %}
                             <div class="checkbox-group">
                                 {% for checkbox in field %}
                                     <label class="checkbox-label">
