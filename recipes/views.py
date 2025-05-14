@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Collection, Recipe, Gallery
-from .forms import RecipeForm
+from .forms import RecipeForm, CollectionForm
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
 
@@ -73,7 +73,7 @@ def create_recipe(request):
             recipe.user = request.user
             recipe.save()
             form.save_m2m()  # Save many-to-many fields
-            return redirect("home")
+            return redirect("recipe", recipe_slug=recipe.slug)
     else:
         form = RecipeForm()
 
@@ -82,6 +82,7 @@ def create_recipe(request):
         "recipes/create_recipe.html",
         {
             "form": form,
+            "edit_mode": False,
         },
     )
 
@@ -109,5 +110,79 @@ def edit_recipe(request, recipe_slug):
             "form": form,
             "edit_mode": True,
             "recipe": recipe,
+        },
+    )
+
+
+@login_required
+def create_collection(request):
+    if request.method == "POST":
+        form = CollectionForm(request.POST, request.FILES)
+        if form.is_valid():
+            collection = form.save(commit=False)
+            collection.user = request.user
+            collection.save()
+            return redirect("profile")
+    else:
+        form = CollectionForm()
+
+    return render(
+        request,
+        "recipes/create_collection.html",
+        {
+            "form": form,
+            "edit_mode": False,
+        },
+    )
+
+
+@login_required
+def edit_collection(request, collection_slug):
+    collection = get_object_or_404(Collection, slug=collection_slug)
+
+    # Check if user is allowed to edit this collection
+    if collection.user != request.user and not request.user.is_staff:
+        return HttpResponseForbidden(
+            "You don't have permission to edit this collection"
+        )
+
+    if request.method == "POST":
+        form = CollectionForm(request.POST, request.FILES, instance=collection)
+        if form.is_valid():
+            form.save()
+            return redirect("collection", collection_slug=collection.slug)
+    else:
+        form = CollectionForm(instance=collection)
+
+    return render(
+        request,
+        "recipes/create_collection.html",
+        {
+            "form": form,
+            "collection": collection,
+            "edit_mode": True,
+        },
+    )
+
+
+@login_required
+def delete_collection(request, collection_slug):
+    collection = get_object_or_404(Collection, slug=collection_slug)
+
+    # Check if user is allowed to delete this collection
+    if collection.user != request.user and not request.user.is_staff:
+        return HttpResponseForbidden(
+            "You don't have permission to delete this collection"
+        )
+
+    if request.method == "POST":
+        collection.delete()
+        return redirect("profile")
+
+    return render(
+        request,
+        "recipes/delete_collection.html",
+        {
+            "collection": collection,
         },
     )

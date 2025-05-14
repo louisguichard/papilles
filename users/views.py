@@ -3,6 +3,7 @@ from django.contrib.auth import login, logout
 from django.contrib import messages
 from .forms import UserRegistrationForm
 from django.http import HttpResponseRedirect
+from recipes.models import Collection
 
 
 def register(request):
@@ -20,7 +21,10 @@ def register(request):
 
 
 def profile(request):
-    return render(request, "users/profile.html")
+    collections = Collection.objects.filter(user=request.user)[
+        :4
+    ]  # Show just the first 4 collections
+    return render(request, "users/profile.html", {"collections": collections})
 
 
 def logout_view(request):

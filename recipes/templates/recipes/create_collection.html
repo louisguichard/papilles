@@ -1,0 +1,131 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% if edit_mode %}Modifier la collection{% else %}Nouvelle collection{% endif %} - Papilles</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #d35400;
+            margin-top: 0;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #d35400;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .form-wrapper {
+            margin-top: 30px;
+        }
+        form label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #444;
+        }
+        form input[type="text"],
+        form textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+        form textarea {
+            resize: vertical;
+        }
+        .submit-button {
+            background-color: #d35400;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 12px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            float: right;
+        }
+        .submit-button:hover {
+            background-color: #aa4400;
+        }
+        .errorlist {
+            color: #d9534f;
+            margin: 5px 0 15px;
+            padding-left: 20px;
+        }
+        .help-text {
+            font-size: 14px;
+            color: #777;
+            margin-bottom: 5px;
+            display: block;
+        }
+        .image-preview {
+            max-width: 300px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="{% if edit_mode %}{% url 'collection' collection.slug %}{% else %}{% url 'profile' %}{% endif %}" class="back-link">← {% if edit_mode %}Retour à la collection{% else %}Retour au profil{% endif %}</a>
+        <h1>{% if edit_mode %}Modifier la collection{% else %}Nouvelle collection{% endif %}</h1>
+        
+        <div class="form-wrapper">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                {% for field in form %}
+                    <p>
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        
+                        {% if field.name == 'image' %}
+                            {% if edit_mode and collection.image %}
+                                <img src="{{ collection.image.url }}" alt="Collection image" class="image-preview">
+                            {% endif %}
+                        {% endif %}
+                        
+                        {{ field }}
+                        
+                        {% if field.help_text %}
+                            <span class="help-text">{{ field.help_text }}</span>
+                        {% endif %}
+                        
+                        {% if field.errors %}
+                            <ul class="errorlist">
+                                {% for error in field.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </p>
+                {% endfor %}
+                
+                <button type="submit" class="submit-button">{% if edit_mode %}Mettre à jour{% else %}Créer{% endif %}</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html> 

@@ -1,0 +1,108 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Supprimer la collection - Papilles</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #d35400;
+            margin-top: 0;
+            margin-bottom: 30px;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #d35400;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .warning-message {
+            margin: 30px 0;
+            padding: 20px;
+            background-color: #fff8e6;
+            border-radius: 8px;
+            color: #856404;
+            font-size: 18px;
+            text-align: center;
+        }
+        .collection-info {
+            margin: 30px 0;
+        }
+        .collection-name {
+            font-weight: bold;
+            font-size: 24px;
+            color: #333;
+        }
+        .actions {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        .button {
+            display: inline-block;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: 500;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        .button.delete {
+            background-color: #dc3545;
+        }
+        .button.delete:hover {
+            background-color: #c82333;
+        }
+        .button.cancel {
+            background-color: #6c757d;
+        }
+        .button.cancel:hover {
+            background-color: #5a6268;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="{% url 'profile' %}" class="back-link">← Retour au profil</a>
+        <h1>Supprimer la collection</h1>
+        
+        <div class="warning-message">
+            Êtes-vous sûr de vouloir supprimer cette collection ? Cette action ne peut pas être annulée.
+        </div>
+        
+        <div class="collection-info">
+            <p>Collection: <span class="collection-name">{{ collection.name }}</span></p>
+        </div>
+        
+        <div class="actions">
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="button delete">Confirmer la suppression</button>
+            </form>
+            <a href="{% url 'profile' %}" class="button cancel">Annuler</a>
+        </div>
+    </div>
+</body>
+</html> 

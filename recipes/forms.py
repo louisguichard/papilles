@@ -1,5 +1,5 @@
 from django import forms
-from .models import Recipe
+from .models import Recipe, Collection
 
 
 class RecipeForm(forms.ModelForm):
@@ -30,4 +30,21 @@ class RecipeForm(forms.ModelForm):
             "picture": "Photo",
             "ingredients": "Ingrédients",
             "instructions": "Instructions",
+        }
+
+
+class CollectionForm(forms.ModelForm):
+    class Meta:
+        model = Collection
+        fields = ["name", "description", "image"]
+        exclude = ["user", "slug"]
+        widgets = {
+            "description": forms.Textarea(
+                attrs={"rows": 5, "placeholder": "Description de la collection"}
+            ),
+        }
+        labels = {
+            "name": "Nom de la collection",
+            "description": "Description",
+            "image": "Image",
         }
