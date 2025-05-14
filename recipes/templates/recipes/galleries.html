@@ -137,8 +137,7 @@
                     <a href="{% url 'profile' %}" class="auth-link">{{ user.username }} 🤗</a>
                     <a href="{% url 'logout' %}" class="auth-link">Logout</a>
                 {% else %}
-                    <a href="{% url 'login' %}" class="auth-link">Login</a>
-                    <a href="{% url 'register' %}" class="auth-link">Register</a>
+                    <a href="{% url 'login' %}" class="auth-link">Connexion</a>
                 {% endif %}
                 <a href="{% url 'create_recipe' %}" class="create-button">
                     + <span>Nouvelle recette</span>

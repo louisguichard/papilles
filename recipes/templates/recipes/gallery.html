@@ -151,14 +151,13 @@
             <div class="user-actions">
                 {% if user.is_authenticated %}
                     <div class="nav-links">
-                        <a href="{% url 'galleries' %}" class="nav-link active">Galleries</a>
+                        <a href="{% url 'galleries' %}" class="nav-link">Galleries</a>
                         <a href="{% url 'my_collections' %}" class="nav-link">Mes collections</a>
                     </div>
                     <a href="{% url 'profile' %}" class="auth-link">{{ user.username }} 🤗</a>
                     <a href="{% url 'logout' %}" class="auth-link">Logout</a>
                 {% else %}
-                    <a href="{% url 'login' %}" class="auth-link">Login</a>
-                    <a href="{% url 'register' %}" class="auth-link">Register</a>
+                    <a href="{% url 'login' %}" class="auth-link">Connexion</a>
                 {% endif %}
             </div>
         </div>
