@@ -1,13 +1,34 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Collection, Recipe
+from .models import Collection, Recipe, Gallery
 from .forms import RecipeForm
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
 
 
 def home(request):
+    if not request.user.is_authenticated:
+        return redirect("galleries")
+
     collections = Collection.objects.all()
     return render(request, "recipes/home.html", {"collections": collections})
+
+
+def galleries(request):
+    galleries = Gallery.objects.all()
+    return render(request, "recipes/galleries.html", {"galleries": galleries})
+
+
+def gallery(request, gallery_slug):
+    gallery = get_object_or_404(Gallery, slug=gallery_slug)
+    recipes = gallery.recipes.all()
+    return render(
+        request,
+        "recipes/gallery.html",
+        {
+            "gallery": gallery,
+            "recipes": recipes,
+        },
+    )
 
 
 def collection(request, collection_slug):

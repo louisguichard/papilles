@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>{% if user.is_authenticated %}Mes collections{% else %}Papilles{% endif %}</title>
+    <title>Galleries - Papilles</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
@@ -45,13 +45,13 @@
         .create-button span {
             margin-left: 6px;
         }
-        .collection-grid {
+        .gallery-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             gap: 25px;
             margin: 0 auto;
         }
-        .collection-tile {
+        .gallery-tile {
             padding: 25px;
             border: 1px solid #e0e0e0;
             border-radius: 12px;
@@ -60,34 +60,26 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.05);
             transition: transform 0.2s, box-shadow 0.2s;
         }
-        .collection-tile:hover {
+        .gallery-tile:hover {
             transform: translateY(-5px);
             box-shadow: 0 6px 12px rgba(0,0,0,0.1);
             background-color: #fff8f2;
         }
-        .collection-tile a {
-            text-decoration: none;
-        }
-        .collection-tile h2 {
-            color: #d35400;
-            margin-top: 0;
-        }
-        .collection-image {
+        .gallery-image {
             width: 100%;
             height: 150px;
             object-fit: cover;
             border-radius: 8px;
             margin-bottom: 15px;
         }
-        .no-image {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #f5f5f5;
-            height: 150px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            color: #aaa;
+        .gallery-tile h2 {
+            margin: 10px 0;
+            color: #333;
+            font-size: 1.2em;
+        }
+        .gallery-tile a {
+            text-decoration: none;
+            color: inherit;
         }
         .user-actions {
             display: flex;
@@ -135,12 +127,12 @@
 <body>
     <div class="container">
         <div class="header-section">
-            <h1>{% if user.is_authenticated %}Mes collections{% else %}Papilles{% endif %}</h1>
+            <h1>Papilles</h1>
             <div class="user-actions">
                 {% if user.is_authenticated %}
                     <div class="nav-links">
-                        <a href="{% url 'galleries' %}" class="nav-link">Galleries</a>
-                        <a href="{% url 'home' %}" class="nav-link active">Mes collections</a>
+                        <a href="{% url 'galleries' %}" class="nav-link active">Galleries</a>
+                        <a href="{% url 'home' %}" class="nav-link">Mes collections</a>
                     </div>
                     <span class="welcome-text">Hello, {{ user.username }}!</span>
                     <a href="{% url 'profile' %}" class="auth-link">Profile</a>
@@ -154,20 +146,20 @@
                 </a>
             </div>
         </div>
-        <div class="collection-grid">
-            {% for collection in collections %}
-                <div class="collection-tile">
-                    <a href="{% url 'collection' collection.slug %}">
-                        {% if collection.image %}
-                            <img src="{{ collection.image.url }}" alt="{{ collection.name }}" class="collection-image">
+        <div class="gallery-grid">
+            {% for gallery in galleries %}
+                <div class="gallery-tile">
+                    <a href="{% url 'gallery' gallery.slug %}">
+                        {% if gallery.image %}
+                            <img src="{{ gallery.image.url }}" alt="{{ gallery.name }}" class="gallery-image">
                         {% else %}
-                            <img src="{% static 'images/no-image-placeholder.png' %}" alt="No image available" class="collection-image">
+                            <img src="{% static 'images/no-image-placeholder.png' %}" alt="No image available" class="gallery-image">
                         {% endif %}
-                        <h2>{{ collection.name }}</h2>
+                        <h2>{{ gallery.name }}</h2>
                     </a>
                 </div>
             {% endfor %}
         </div>
     </div>
 </body>
-</html>
+</html> 
