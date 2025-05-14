@@ -9,8 +9,7 @@ def home(request):
     if not request.user.is_authenticated:
         return redirect("galleries")
 
-    collections = Collection.objects.all()
-    return render(request, "recipes/home.html", {"collections": collections})
+    return redirect("my_collections")
 
 
 def galleries(request):
@@ -29,6 +28,12 @@ def gallery(request, gallery_slug):
             "recipes": recipes,
         },
     )
+
+
+@login_required
+def my_collections(request):
+    collections = Collection.objects.filter(user=request.user)
+    return render(request, "recipes/my_collections.html", {"collections": collections})
 
 
 def collection(request, collection_slug):

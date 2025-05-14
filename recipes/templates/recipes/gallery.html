@@ -152,7 +152,7 @@
                 {% if user.is_authenticated %}
                     <div class="nav-links">
                         <a href="{% url 'galleries' %}" class="nav-link active">Galleries</a>
-                        <a href="{% url 'home' %}" class="nav-link">Mes collections</a>
+                        <a href="{% url 'my_collections' %}" class="nav-link">Mes collections</a>
                     </div>
                     <span class="welcome-text">Hello, {{ user.username }}!</span>
                     <a href="{% url 'profile' %}" class="auth-link">Profile</a>
