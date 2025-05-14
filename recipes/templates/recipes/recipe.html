@@ -272,6 +272,8 @@
                     <a href="{% url 'create_collection' %}" class="create-collection-link">Créer une collection</a>
                 </div>
                 {% endif %}
+            {% else %}
+                <a href="{% url 'login' %}?next={{ request.path }}" class="edit-button">Ajouter à mes collections</a>
             {% endif %}
         </div>
         
